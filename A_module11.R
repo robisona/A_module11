@@ -102,6 +102,23 @@ shapiro.test(Ants.AOV$residuals)
 # interpretation qualitatively different than your interpretation of the ANOVA? 
   
 
+# We first must decide whether to use parametic or non-parametric correlation. So we check assumptions via 
+# univariate normality. We can use histrograms to judge the normality of our data
+hist(AntsData$Abundance)  # Not normally distributed
+hist(AntsData$Delta)      # Not normally distributed
+
+
+# Because our data is not normal, we must use non-parametric correlation. We start with the Spearman
+# correlation method.
+cor.test(AntsData$Abundance, AntsData$Delta, method = "spearman")  
+# Although the result is not significant (p = 0.18), we have ties in out data which suggests the Spearman
+# method is not appropriate.
+
+
+# Instead, we can use the Kendall correlation method
+cor.test(AntsData$Abundance, AntsData$Delta, method = "kendall") 
+# Again, our result is not significant (p = 0.18), indicating there is not a correlation between temperature
+# and abundance
 
 
 
