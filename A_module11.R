@@ -16,7 +16,7 @@
 
 ##############################################################################################################
 # Set your working directory and read in the ants_duke.csv data file.  
-setwd("C:\\Users\\Drew\\Documents\\UNH\\Courses\\NR 995 - R\\Modules\\11")
+setwd("C:/Users/Connor/Documents/word_files/graduate_courses/r/module_11")
 
 AntsData <- read.table("ants_duke.csv", sep=",", header = T, stringsAsFactors = F)
 
@@ -30,9 +30,10 @@ summary(AntsData)
 str(AntsData)                   # There are 54 obsevations and 4 variables
 length(unique(AntsData$Binom))  # There are 5 species
 length(unique(AntsData$Delta))  # There are 12 temperature treatments
+length(unique(AntsData$CTmax))  # 5 unique max temperature values
 sum(is.na(AntsData))            # There is no missing data
 
-
+# All values within the AntsData matrix seem to be reasonable for what they represent (e.g. # of ants, temperature)
 
 ##############################################################################################################
 # (2)	Recall that Delta is a temperature treatment variable.  Categorize the values provided into three
@@ -56,7 +57,7 @@ summary(AntsData$TempTreat)   # There are 18 observations in each temperature cl
 # ANOVA to test the hypothesis that higher temperature reduces ant abundance.  Be sure to check assumptions!
 
 
-# Run ANOVA determining is the abundance is similar among temperature calsses?
+# Run ANOVA determining if the abundance is similar among temperature calsses?
 Ants.AOV <- aov(AntsData$Abundance ~ AntsData$TempTreat)
 Ants.AOV
 summary(Ants.AOV)
@@ -87,7 +88,9 @@ bartlett.test(AntsData$Abundance ~ AntsData$TempTreat) # p > 0.05, so no problem
 ## Normal q-q plots compares residuals (y) to a theoretical distribution (normal, on x), want points on line
 par(mfrow = c(2,2))
 plot(Ants.AOV)
-# Maybe some problems here....?
+# The "Residuals vs. Fitted" plot has a horizontal fitted line and the "Scale-Location" plot has a roughly horizontal line.
+# The normal Q-Q plot, however, breaks away from the normal distribution line towards the end of the plot, so this may be an
+# indication that data may need to be tranformed or that an ANOVA is not an appropriate analysis for our data. 
 
 
 # Finally, perform the Shapiro test for normality of residuals
@@ -111,20 +114,23 @@ hist(AntsData$Delta)      # Not normally distributed
 # Because our data is not normal, we must use non-parametric correlation. We start with the Spearman
 # correlation method.
 cor.test(AntsData$Abundance, AntsData$Delta, method = "spearman")  
-# Although the result is not significant (p = 0.18), we have ties in out data which suggests the Spearman
+# Although the result is not significant (p = 0.18), we have rank ties in out data which suggests the Spearman
 # method is not appropriate.
 
 
 # Instead, we can use the Kendall correlation method
 cor.test(AntsData$Abundance, AntsData$Delta, method = "kendall") 
-# Again, our result is not significant (p = 0.18), indicating there is not a correlation between temperature
+# Again, our result is not significant (p = 0.19), indicating there is not a correlation between temperature
 # and abundance
 
+# Since we have found no significant correlation between ant abundance and treatment temperature (Delta), our interpretation
+# of the data does not differ from our interpretation when running an ANOVA
 
 
-
-
-
+##############################################################################################################
+# Group contributions
+# All group members individually completed this week's assignment and compared answers at our weekly meeting. We used Drew's
+# base code because it was well organized, Connor and Korik made comments and code edits as necessary.
 
 
 
